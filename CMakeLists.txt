@@ -38,13 +38,12 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb3 -pg")
 file(GLOB_RECURSE SOURCES src/*.c)
 set(HEADERS
   include/
-  lib/C-Macro-Collections/src
-  lib/flecs/include/)
+  lib/Unity-2.5.2/src/)
 
 # This is the main part:
 add_library(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${HEADERS})
-target_link_libraries(${PROJECT_NAME} raylib flecs)
+target_link_libraries(${PROJECT_NAME} raylib)
 
 #set(raylib_VERBOSE 1)
 
@@ -55,7 +54,4 @@ if (APPLE)
     target_link_libraries(${PROJECT_NAME} "-framework OpenGL")
 endif()
 
-add_executable(gameoflife src/main.c)
-target_include_directories(gameoflife PRIVATE include/)
-file(GLOB_RECURSE SOURCES src/*.c)
-file(GLOB_RECURSE HEADERS include/*.h)
+add_subdirectory(test/)
