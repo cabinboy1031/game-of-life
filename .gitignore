@@ -1,0 +1,5 @@
+.vscode/
+.ccls-cache/
+build/
+.cache/
+gmon.out
