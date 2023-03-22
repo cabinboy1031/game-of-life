@@ -45,7 +45,10 @@ add_library(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${HEADERS})
 target_link_libraries(${PROJECT_NAME} raylib)
 
-#set(raylib_VERBOSE 1)
+add_executable(gameoflife src/main.c)
+target_link_libraries(gameoflife ${PROJECT_NAME} raylib)
+
+set(raylib_VERBOSE 1)
 
 # Checks if OSX and links appropriate frameworks (Only required on MacOS)
 if (APPLE)
