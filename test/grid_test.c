@@ -31,9 +31,44 @@ void grid_create_should_returnValidGrid(){
     TEST_ASSERT_EQUAL_FLOAT( 0,   G3.offset.y);
 }
 
+
+void grid_to_screen_should_produceCorrectCoordinate(){
+    const grid_s G1 = grid_create(10, (Vector2) {50, 0});
+
+    TEST_ASSERT_EQUAL_FLOAT( 150,  grid_to_screen(G1, (Vector2){10,10}).x);
+    TEST_ASSERT_EQUAL_FLOAT( 100,  grid_to_screen(G1, (Vector2){10,10}).y);
+
+    TEST_ASSERT_EQUAL_FLOAT( 155,  grid_to_screen(G1, (Vector2){10.5,10.5}).x);
+    TEST_ASSERT_EQUAL_FLOAT( 105,  grid_to_screen(G1, (Vector2){10.5,10.5}).y);
+}
+
+void screen_to_grid_should_produceCorrectCoordinate(){
+    const grid_s G1 = grid_create(10, (Vector2) {50, 0});
+
+    TEST_ASSERT_EQUAL_FLOAT( 10,  screen_to_grid(G1, (Vector2){150,100}).x);
+    TEST_ASSERT_EQUAL_FLOAT( 10,  screen_to_grid(G1, (Vector2){150,100}).y);
+
+    TEST_ASSERT_EQUAL_FLOAT( 10,  screen_to_grid(G1, (Vector2){155,105}).x);
+    TEST_ASSERT_EQUAL_FLOAT( 10,  screen_to_grid(G1, (Vector2){155,105}).y);
+}
+
+void screen_to_grid_exact_should_produceCorrectCoordinate(){
+    const grid_s G1 = grid_create(10, (Vector2) {50, 0});
+
+    TEST_ASSERT_EQUAL_FLOAT( 10,  screen_to_grid_exact(G1, (Vector2){150,100}).x);
+    TEST_ASSERT_EQUAL_FLOAT( 10,  screen_to_grid_exact(G1, (Vector2){150,100}).y);
+    
+    TEST_ASSERT_EQUAL_FLOAT( 10.5,  screen_to_grid_exact(G1, (Vector2){155,105}).x);
+    TEST_ASSERT_EQUAL_FLOAT( 10.5,  screen_to_grid_exact(G1, (Vector2){155,105}).y);
+    
+}
+
 int main(){
     UNITY_BEGIN();
-    RUN_TEST(grid_create_should_returnDummyGridOnErr);
-    RUN_TEST(grid_create_should_returnValidGrid);
+        RUN_TEST(grid_create_should_returnDummyGridOnErr);
+        RUN_TEST(grid_create_should_returnValidGrid);
+        RUN_TEST(grid_to_screen_should_produceCorrectCoordinate);
+        RUN_TEST(screen_to_grid_should_produceCorrectCoordinate);
+        RUN_TEST(screen_to_grid_exact_should_produceCorrectCoordinate);
     return UNITY_END();
 }

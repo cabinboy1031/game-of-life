@@ -43,10 +43,10 @@ set(HEADERS
 # This is the main part:
 add_library(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${HEADERS})
-target_link_libraries(${PROJECT_NAME} raylib)
+target_link_libraries(${PROJECT_NAME} raylib m)
 
 add_executable(gameoflife src/main.c)
-target_link_libraries(gameoflife ${PROJECT_NAME} raylib)
+target_link_libraries(gameoflife ${PROJECT_NAME})
 
 set(raylib_VERBOSE 1)
 
