@@ -3,18 +3,38 @@
 #include <rlgl.h>
 #include <raymath.h>
 
+#include "raygui.h"
+#include "gol/game.h"
+#include "gol/grid.h"
+
+
 int main(){
     // Initialization
     //--------------------------------------------------------------------------------------
-    const int screenWidth = 800;
-    const int screenHeight = 450;
+    const int SCREEN_WIDTH = 800;
+    const int SCREEN_HEIGHT = 600;
+    const int TARGET_FPS = 60;
+    game_s game = game_new();
+    grid_s display_data = grid_create(20, (Vector2){0, 0});
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - 2d camera mouse zoom");
+    InitWindow( SCREEN_WIDTH, 
+                SCREEN_HEIGHT, 
+                "raylib [core] example - 2d camera mouse zoom");
 
     Camera2D camera = { 0 };
-    camera.zoom = 1.0f;
+    camera.zoom = 0.2f;
 
-    SetTargetFPS(60);                   // Set our game to run at 60 frames-per-second
+    SetTargetFPS(TARGET_FPS);                   // Set our game to run at 60 frames-per-second
+    
+
+    for(int x = 0; x <= GAME_WIDTH; x++){
+        for(int y = 0; y <= GAME_HEIGHT; y++){
+            if(y % 2 != 0){
+                game.screen_board[x * SCREEN_WIDTH + y] = true;
+            }
+        }
+    }
+    
     //--------------------------------------------------------------------------------------
 
     // Main game loop
@@ -27,6 +47,10 @@ int main(){
             delta = Vector2Scale(delta, -1.0f/camera.zoom);
 
             camera.target = Vector2Add(camera.target, delta);
+        }
+        
+        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+            // Flip the state of the currently selected cell
         }
 
         // Zoom based on mouse wheel
@@ -55,20 +79,40 @@ int main(){
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-            ClearBackground(BLACK);
+            ClearBackground(RAYWHITE);
 
             BeginMode2D(camera);
 
-                // Draw the 3d grid, rotated 90 degrees and centered around 0,0 
-                // just so we have something in the XY plane
-                rlPushMatrix();
-                    rlTranslatef(0, 25*50, 0);
-                    rlRotatef(90, 1, 0, 0);
-                    DrawGrid(100, 50);
-                rlPopMatrix();
+                for(int x = 0; x <= GAME_WIDTH; x++){
+                    for(int y = 0; y <= GAME_HEIGHT; y++){
+                        if(game.screen_board[(x * GAME_WIDTH) + y]){
+                            DrawRectangle(
+                                display_data.offset.x + (x * display_data.size),
+                                display_data.offset.y + (y * display_data.size),
+                                display_data.size,
+                                display_data.size,
+                                YELLOW);
+                        }
+                    }
+                }
 
-                // Draw a reference circle
-                DrawCircle(100, 100, 50, YELLOW);
+                for(int x = 0; x <= GAME_WIDTH; x++){
+                    DrawLine(
+                        display_data.offset.x + (x * display_data.size),
+                        display_data.offset.y,
+                        display_data.offset.x + (x * display_data.size),
+                        display_data.offset.y + (GAME_HEIGHT * display_data.size),
+                        GRAY);
+                }
+                for(int y = 0; y <= GAME_HEIGHT; y++){
+                    DrawLine(
+                        display_data.offset.x,
+                        display_data.offset.y + (y * display_data.size),
+                        display_data.offset.x + (GAME_WIDTH * display_data.size),
+                        display_data.offset.y + (y * display_data.size),
+                        GRAY);
+                }
+                
                 
             EndMode2D();
 

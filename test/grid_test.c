@@ -1,4 +1,3 @@
-
 #include <unity.h>
 #include <gol/grid.h>
 #include <raylib.h>
