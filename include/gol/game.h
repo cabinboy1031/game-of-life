@@ -26,5 +26,5 @@ void game_board_swap(game_s* game);
 
 /**
  *
- 
  */
+void game_update(game_s* game);

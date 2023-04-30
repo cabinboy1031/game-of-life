@@ -6,6 +6,8 @@
 #include "raygui.h"
 #include "gol/game.h"
 #include "gol/grid.h"
+#include "gol/input.h"
+#include "gol/timer.h"
 
 
 int main(){
@@ -26,15 +28,18 @@ int main(){
 
     SetTargetFPS(TARGET_FPS);                   // Set our game to run at 60 frames-per-second
     
+    key_input_s lmb_input = (key_input_s){
+        .key = MOUSE_LEFT_BUTTON,
+        .ignore_hold = true };
 
-    for(int x = 0; x <= GAME_WIDTH; x++){
-        for(int y = 0; y <= GAME_HEIGHT; y++){
-            if(y % 2 != 0){
-                game.screen_board[x * SCREEN_WIDTH + y] = true;
-            }
-        }
-    }
-    
+    key_input_s space_input = (key_input_s){
+        .key = KEY_SPACE,
+        .ignore_hold = true
+    };
+    bool run_simulation = false;
+
+    Timer timer;
+    StartTimer(&timer, .25);
     //--------------------------------------------------------------------------------------
 
     // Main game loop
@@ -42,21 +47,34 @@ int main(){
         // Update
         //----------------------------------------------------------------------------------
         // Translate based on mouse right click
-        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)){
-            Vector2 delta = GetMouseDelta();
-            delta = Vector2Scale(delta, -1.0f/camera.zoom);
+            if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)){
+                Vector2 delta = GetMouseDelta();
+                delta = Vector2Scale(delta, -1.0f/camera.zoom);
 
-            camera.target = Vector2Add(camera.target, delta);
-        }
+                camera.target = Vector2Add(camera.target, delta);
+            }
         
-        if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-            // Flip the state of the currently selected cell
+        if(input_mouse_run(&lmb_input)){
+            if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
+                // get the mouse position
+                Vector2 mouse = Vector2Transform(
+                    GetMousePosition(), 
+                    MatrixInvert(GetCameraMatrix2D(camera)));
+
+
+                // find what cell that mouse position corresponds to
+                Vector2 cell = screen_to_grid(display_data, mouse);
+                // Flip the state of the current cell at the mouse position
+                game.screen_board[(int)((cell.x * GAME_WIDTH) + cell.y)] = !game.screen_board[(int)((cell.x * GAME_WIDTH) + cell.y)];
+            }
+        }
+        if(input_key_run(&space_input)){
+            run_simulation = !run_simulation;
         }
 
         // Zoom based on mouse wheel
         float wheel = GetMouseWheelMove();
-        if (wheel != 0)
-        {
+        if (wheel != 0){
             // Get the world point that is under the mouse
             Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), camera);
             
@@ -73,13 +91,18 @@ int main(){
             camera.zoom += (wheel*zoomIncrement);
             if (camera.zoom < zoomIncrement) camera.zoom = zoomIncrement;
         }
+        
+        if(run_simulation && TimerDone(timer)){
+            game_update(&game);
+            StartTimer(&timer, 0.25);
+        }
 
         //----------------------------------------------------------------------------------
 
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
-            ClearBackground(RAYWHITE);
+            ClearBackground(BLACK);
 
             BeginMode2D(camera);
 
@@ -91,7 +114,7 @@ int main(){
                                 display_data.offset.y + (y * display_data.size),
                                 display_data.size,
                                 display_data.size,
-                                YELLOW);
+                                ORANGE);
                         }
                     }
                 }
