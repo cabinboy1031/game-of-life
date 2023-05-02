@@ -1,7 +1,7 @@
 #include <raylib.h>
 
-#define GAME_WIDTH 1024
-#define GAME_HEIGHT 1024
+#define GAME_WIDTH 100
+#define GAME_HEIGHT 100
 #define EDGE_IS_WALL 'w'
 #define EDGE_IS_LOOP 'l'
 

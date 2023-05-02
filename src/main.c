@@ -13,6 +13,7 @@
 int main(){
     // Initialization
     //--------------------------------------------------------------------------------------
+    printf("%d\n", sizeof(int));
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
     const int TARGET_FPS = 60;
@@ -108,8 +109,8 @@ int main(){
             ClearBackground(BLACK);
 
             BeginMode2D(camera);
-                for(int x = 0; x <= game.width; x++){
-                    for(int y = 0; y <= game.height; y++){
+                for(int x = 0; x < game.width; x++){
+                    for(int y = 0; y < game.height; y++){
                         if(game.screen_board[(x * game.width) + y]){
                             DrawRectangle(
                                 display_data.offset.x + (x * display_data.size),
