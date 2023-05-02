@@ -17,6 +17,11 @@ game_s game_new(){
     return game;
 }
 
+void game_delete(game_s* game){
+    free(game->screen_board);
+    free(game->update_board);
+}
+
 void game_board_swap(game_s* game){ 
     bool *temp;
     temp = game->screen_board;
@@ -38,16 +43,16 @@ void game_update(game_s* game){
 int cell_get_num_neighbors(game_s* game, int x, int y){
     int alive = 0;
 
-    alive += game->screen_board[game_cell_index(game, x - 1, y - 1)] ? 1 : 0;
-    alive += game->screen_board[game_cell_index(game, x - 1, y    )] ? 1 : 0;
-    alive += game->screen_board[game_cell_index(game, x - 1, y + 1)] ? 1 : 0;
+    alive += game_get_cell(game, x - 1, y - 1) ? 1 : 0;
+    alive += game_get_cell(game, x - 1, y    ) ? 1 : 0;
+    alive += game_get_cell(game, x - 1, y + 1) ? 1 : 0;
 
-    alive += game->screen_board[game_cell_index(game, x    , y - 1)] ? 1 : 0;
-    alive += game->screen_board[game_cell_index(game, x    , y + 1)] ? 1 : 0;
+    alive += game_get_cell(game, x    , y - 1) ? 1 : 0;
+    alive += game_get_cell(game, x    , y + 1) ? 1 : 0;
 
-    alive += game->screen_board[game_cell_index(game, x + 1, y - 1)] ? 1 : 0;
-    alive += game->screen_board[game_cell_index(game, x + 1, y    )] ? 1 : 0;
-    alive += game->screen_board[game_cell_index(game, x + 1, y + 1)] ? 1 : 0;
+    alive += game_get_cell(game, x + 1, y - 1) ? 1 : 0;
+    alive += game_get_cell(game, x + 1, y    ) ? 1 : 0;
+    alive += game_get_cell(game, x + 1, y + 1) ? 1 : 0;
 
     return alive;
 }
@@ -64,4 +69,17 @@ bool is_cell_alive(game_s* game, int x, int y, int alive){
 
 int game_cell_index(game_s* game, int x, int y){
     return (x * GAME_WIDTH) + y;
+}
+
+bool game_get_cell(game_s* game, int x, int y){
+    if(x < 0 || y < 0 || x >= game->width || y >= game->height){
+        return game_handle_edge(game, x, y);
+    }
+    return game->screen_board[game_cell_index(game, x, y)];
+}
+
+bool game_handle_edge(game_s* game, int x, int y){
+    if( game->handle_edges == EDGE_IS_WALL) return false;
+    if( game->handle_edges == EDGE_IS_LOOP) return game->screen_board[game_cell_index(game, x % game->width, y % game->height)];
+    return false; // default to wall behavior if wrongly defined
 }

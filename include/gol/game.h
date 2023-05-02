@@ -1,7 +1,7 @@
 #include <raylib.h>
 
-#define GAME_WIDTH 100
-#define GAME_HEIGHT 100
+#define GAME_WIDTH 2048
+#define GAME_HEIGHT 2048
 #define EDGE_IS_WALL 'w'
 #define EDGE_IS_LOOP 'l'
 
@@ -19,6 +19,7 @@ typedef struct game_s{
  */
 game_s game_new();
 
+void game_delete(game_s*);
 /**
  * game_s* -> void
  * swaps the update and screen board, changing their roles as well
@@ -30,5 +31,7 @@ void game_board_swap(game_s* game);
  */
 void game_update(game_s* game);
 
+bool game_get_cell(game_s*, int, int);
+bool game_handle_edge(game_s*, int,int);
 /** gets the index based on the size of the board*/
 int game_cell_index(game_s*, int, int);
