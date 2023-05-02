@@ -44,9 +44,11 @@ int main(){
 
     // Main game loop
     while (!WindowShouldClose()){       // Detect window close button or ESC key
+        //----------------------------------------------------------------------------------
         // Update
         //----------------------------------------------------------------------------------
-        // Translate based on mouse right click
+        // Input
+        //----------------------------------------------------------------------------------
             if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)){
                 Vector2 delta = GetMouseDelta();
                 delta = Vector2Scale(delta, -1.0f/camera.zoom);
@@ -91,14 +93,16 @@ int main(){
             camera.zoom += (wheel*zoomIncrement);
             if (camera.zoom < zoomIncrement) camera.zoom = zoomIncrement;
         }
-        
+
+        //----------------------------------------------------------------------------------
+        // Game Update 
+        //----------------------------------------------------------------------------------
         if(run_simulation && TimerDone(timer)){
             game_update(&game);
             StartTimer(&timer, 0.25);
         }
 
         //----------------------------------------------------------------------------------
-
         // Draw
         //----------------------------------------------------------------------------------
         BeginDrawing();
