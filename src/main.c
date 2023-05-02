@@ -66,7 +66,7 @@ int main(){
                 // find what cell that mouse position corresponds to
                 Vector2 cell = screen_to_grid(display_data, mouse);
                 // Flip the state of the current cell at the mouse position
-                game.screen_board[(int)((cell.x * GAME_WIDTH) + cell.y)] = !game.screen_board[(int)((cell.x * GAME_WIDTH) + cell.y)];
+                game.screen_board[game_cell_index(&game, (int)cell.x, (int)cell.y)] = !game.screen_board[game_cell_index(&game, (int)cell.x, (int)cell.y)];
             }
         }
         if(input_key_run(&space_input)){
@@ -108,10 +108,9 @@ int main(){
             ClearBackground(BLACK);
 
             BeginMode2D(camera);
-
-                for(int x = 0; x <= GAME_WIDTH; x++){
-                    for(int y = 0; y <= GAME_HEIGHT; y++){
-                        if(game.screen_board[(x * GAME_WIDTH) + y]){
+                for(int x = 0; x <= game.width; x++){
+                    for(int y = 0; y <= game.height; y++){
+                        if(game.screen_board[(x * game.width) + y]){
                             DrawRectangle(
                                 display_data.offset.x + (x * display_data.size),
                                 display_data.offset.y + (y * display_data.size),
@@ -122,28 +121,26 @@ int main(){
                     }
                 }
 
-                for(int x = 0; x <= GAME_WIDTH; x++){
+                for(int x = 0; x <= game.width; x++){
                     DrawLine(
                         display_data.offset.x + (x * display_data.size),
                         display_data.offset.y,
                         display_data.offset.x + (x * display_data.size),
-                        display_data.offset.y + (GAME_HEIGHT * display_data.size),
+                        display_data.offset.y + (game.height * display_data.size),
                         GRAY);
                 }
-                for(int y = 0; y <= GAME_HEIGHT; y++){
+
+                for(int y = 0; y <= game.height; y++){
                     DrawLine(
                         display_data.offset.x,
                         display_data.offset.y + (y * display_data.size),
-                        display_data.offset.x + (GAME_WIDTH * display_data.size),
+                        display_data.offset.x + (game.width * display_data.size),
                         display_data.offset.y + (y * display_data.size),
                         GRAY);
                 }
-                
-                
             EndMode2D();
-
             DrawText("Mouse right button drag to move, mouse wheel to zoom", 10, 10, 20, WHITE);
-        
+            DrawText(game.paused ? "Game: Paused" : "Game: Running...", 11,20,20, game.paused ? RED : GREEN);
         EndDrawing();
         //----------------------------------------------------------------------------------
 }
