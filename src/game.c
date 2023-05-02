@@ -6,7 +6,7 @@ bool is_cell_alive(game_s*, int, int, int);
 
 game_s game_new(){
     game_s game = (game_s){
-        .paused = false,
+        .paused = true,
         .handle_edges = EDGE_IS_WALL
     };
     game.update_board = calloc(GAME_WIDTH * GAME_HEIGHT, sizeof(bool));

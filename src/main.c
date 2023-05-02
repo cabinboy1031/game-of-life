@@ -36,7 +36,6 @@ int main(){
         .key = KEY_SPACE,
         .ignore_hold = true
     };
-    bool run_simulation = false;
 
     Timer timer;
     StartTimer(&timer, .25);
@@ -71,7 +70,7 @@ int main(){
             }
         }
         if(input_key_run(&space_input)){
-            run_simulation = !run_simulation;
+            game.paused = !game.paused;
         }
 
         // Zoom based on mouse wheel
@@ -97,7 +96,7 @@ int main(){
         //----------------------------------------------------------------------------------
         // Game Update 
         //----------------------------------------------------------------------------------
-        if(run_simulation && TimerDone(timer)){
+        if(!game.paused && TimerDone(timer)){
             game_update(&game);
             StartTimer(&timer, 0.25);
         }
