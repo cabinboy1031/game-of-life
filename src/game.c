@@ -11,7 +11,7 @@ game_s game_new(){
         .screen_board = calloc(GAME_WIDTH * GAME_HEIGHT, sizeof(bool)),
         .update_board = calloc(GAME_WIDTH * GAME_HEIGHT, sizeof(bool)),
         .paused = true,
-        .handle_edges = EDGE_IS_WALL,
+        .handle_edges = EDGE_IS_LOOP,
     };
 
     return game;
@@ -58,10 +58,10 @@ int cell_get_num_neighbors(game_s* game, int x, int y){
 }
 
 bool is_cell_alive(game_s* game, int x, int y, int alive){
-    if(game->screen_board[((x) * GAME_WIDTH) + y] && (alive == 2 || alive == 3)){
+    if( game->screen_board[game_cell_index(game, x, y)] && (alive == 2 || alive == 3)){
         return true;
     } 
-    if(!game->screen_board[((x) * GAME_WIDTH) + y] && alive == 3){
+    if(!game->screen_board[game_cell_index(game, x, y)] && alive == 3){
         return true;
     } 
     return false;

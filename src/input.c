@@ -2,6 +2,18 @@
 #include <raylib.h>
 #include <stdio.h>
 
+bool input_run(key_input_s* input){
+    switch(input->mode){
+        case INPUT_KEY:
+            input_key_run(input);
+            break;
+        case INPUT_MOUSE:
+            input_mouse_run(input);
+            break;
+        default:
+            printf("Sorry, this input mode has not been implemented yet :^)");  
+    }
+}
 
 bool input_key_run(key_input_s* input){
     if(input->ignore_hold && input->pressed){

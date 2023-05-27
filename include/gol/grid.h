@@ -17,7 +17,8 @@ void fnForGrid(grid_s g){
     assert(g.size);
     assert(g.offset.x);
     assert(g.offset.y);
-}*/
+}
+*/
 
 /**
  * int, Vector2 -> grid_s

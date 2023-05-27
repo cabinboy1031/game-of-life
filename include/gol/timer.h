@@ -1,22 +1,22 @@
 #include <raylib.h>
 
-typedef struct Timer {
+typedef struct timer_s {
     double startTime;   // Start time (seconds)
     double lifeTime;    // Lifetime (seconds)
-} Timer;
+} timer_s;
 
-void StartTimer(Timer *timer, double lifetime)
+void timer_start(timer_s *timer, double lifetime)
 {
     timer->startTime = GetTime();
     timer->lifeTime = lifetime;
 }
 
-bool TimerDone(Timer timer)
+bool timer_done(timer_s timer)
 {
     return GetTime() - timer.startTime >= timer.lifeTime;
 }
 
-double GetElapsed(Timer timer)
+double timer_elapsed(timer_s timer)
 {
     return GetTime() - timer.startTime;
 }

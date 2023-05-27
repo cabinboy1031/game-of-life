@@ -31,15 +31,24 @@ int main(){
     
     key_input_s lmb_input = (key_input_s){
         .key = MOUSE_LEFT_BUTTON,
-        .ignore_hold = true };
+        .ignore_hold = true,
+        .mode = INPUT_MOUSE,
+        };
+
+    key_input_s rmb_input = (key_input_s){
+        .key = MOUSE_RIGHT_BUTTON,
+        .ignore_hold = false,
+        .mode = INPUT_MOUSE,
+        };
 
     key_input_s space_input = (key_input_s){
         .key = KEY_SPACE,
-        .ignore_hold = true
+        .ignore_hold = true,
+        .mode = INPUT_KEY,
     };
 
-    Timer timer;
-    StartTimer(&timer, .25);
+    timer_s timer;
+    timer_start(&timer, .25);
     //--------------------------------------------------------------------------------------
 
     // Main game loop
@@ -49,28 +58,27 @@ int main(){
         //----------------------------------------------------------------------------------
         // Input
         //----------------------------------------------------------------------------------
-            if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)){
+            if (input_run(&rmb_input)){
                 Vector2 delta = GetMouseDelta();
                 delta = Vector2Scale(delta, -1.0f/camera.zoom);
 
                 camera.target = Vector2Add(camera.target, delta);
             }
         
-        if(input_mouse_run(&lmb_input)){
-            if(IsMouseButtonDown(MOUSE_BUTTON_LEFT)){
-                // get the mouse position
-                Vector2 mouse = Vector2Transform(
-                    GetMousePosition(), 
-                    MatrixInvert(GetCameraMatrix2D(camera)));
+        if(input_run(&lmb_input)){
+            // get the mouse position
+            Vector2 mouse = Vector2Transform(
+                GetMousePosition(), 
+                MatrixInvert(GetCameraMatrix2D(camera)));
 
 
-                // find what cell that mouse position corresponds to
-                Vector2 cell = screen_to_grid(display_data, mouse);
-                // Flip the state of the current cell at the mouse position
-                game.screen_board[game_cell_index(&game, (int)cell.x, (int)cell.y)] = !game.screen_board[game_cell_index(&game, (int)cell.x, (int)cell.y)];
-            }
+            // find what cell that mouse position corresponds to
+            Vector2 cell = screen_to_grid(display_data, mouse);
+            // Flip the state of the current cell at the mouse position
+            game.screen_board[game_cell_index(&game, (int)cell.x, (int)cell.y)] = !game.screen_board[game_cell_index(&game, (int)cell.x, (int)cell.y)];
         }
-        if(input_key_run(&space_input)){
+
+        if(input_run(&space_input)){
             game.paused = !game.paused;
         }
 
@@ -97,9 +105,9 @@ int main(){
         //----------------------------------------------------------------------------------
         // Game Update 
         //----------------------------------------------------------------------------------
-        if(!game.paused && TimerDone(timer)){
+        if(!game.paused && timer_done(timer)){
             game_update(&game);
-            StartTimer(&timer, 0.25);
+            timer_start(&timer, 0.25);
         }
 
         //----------------------------------------------------------------------------------
