@@ -58,10 +58,12 @@ int cell_get_num_neighbors(game_s* game, int x, int y){
 }
 
 bool is_cell_alive(game_s* game, int x, int y, int alive){
-    if( game->screen_board[game_cell_index(game, x, y)] && (alive == 2 || alive == 3)){
+    int cell_index = game_cell_index(game, x, y);
+    bool cell = game->screen_board[cell_index];
+    if(cell && (alive == 2 || alive == 3)){
         return true;
     } 
-    if(!game->screen_board[game_cell_index(game, x, y)] && alive == 3){
+    if(!cell && alive == 3){
         return true;
     } 
     return false;

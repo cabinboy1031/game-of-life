@@ -5,14 +5,15 @@
 bool input_run(key_input_s* input){
     switch(input->mode){
         case INPUT_KEY:
-            input_key_run(input);
+            return input_key_run(input);
             break;
         case INPUT_MOUSE:
-            input_mouse_run(input);
+            return input_mouse_run(input);
             break;
         default:
             printf("Sorry, this input mode has not been implemented yet :^)");  
     }
+    return false;
 }
 
 bool input_key_run(key_input_s* input){
@@ -31,6 +32,8 @@ bool input_key_run(key_input_s* input){
         input->pressed = false;
         return false;
     }
+
+    return false;
 }
 
 bool input_mouse_run(key_input_s* input){

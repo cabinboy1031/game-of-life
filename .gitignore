@@ -3,3 +3,4 @@
 build/
 .cache/
 gmon.out
+oprofile_data/
