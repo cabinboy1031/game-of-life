@@ -29,6 +29,7 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
 endif()
 
 add_subdirectory(lib/Unity-2.5.2/) # testing framework
+add_subdirectory(lib/qlibc/)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_C_STANDARD 17)
@@ -37,12 +38,14 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb3 -pg")
 
 file(GLOB_RECURSE SOURCES src/*.c)
 set(HEADERS
-  include/)
+  include/
+  lib/qlibc/include
+)
 
 # This is the main part:
 add_library(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${HEADERS})
-target_link_libraries(${PROJECT_NAME} raylib m)
+target_link_libraries(${PROJECT_NAME} raylib m qlibc)
 
 add_executable(gameoflife main.c)
 target_link_libraries(gameoflife ${PROJECT_NAME})

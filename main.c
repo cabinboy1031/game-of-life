@@ -3,10 +3,11 @@
 #include <rlgl.h>
 #include <raymath.h>
 
-#include <gol/game.h>
-#include <gol/grid.h>
-#include <gol/input.h>
-#include <gol/timer.h>
+#include "raygui.h"
+#include "gol/game.h"
+#include "gol/grid.h"
+#include "gol/input.h"
+#include "gol/timer.h"
 
 
 int main(){
@@ -14,7 +15,7 @@ int main(){
     //--------------------------------------------------------------------------------------
     printf("%d\n", sizeof(int));
     const int SCREEN_WIDTH = 800;
-    const int SCREEN_HEIGHT = 800;
+    const int SCREEN_HEIGHT = 600;
     const int TARGET_FPS = 60;
     game_s game = game_new();
     grid_s display_data = grid_create(20, (Vector2){0, 0});
@@ -75,6 +76,9 @@ int main(){
             Vector2 cell = screen_to_grid(display_data, mouse);
             // Flip the state of the current cell at the mouse position
             game.screen_board[game_cell_index(&game, (int)cell.x, (int)cell.y)] = !game.screen_board[game_cell_index(&game, (int)cell.x, (int)cell.y)];
+
+            // Add cell and neighbors to active state
+            game_set_active_with_neighbors(&game, (int)cell.x, (int)cell.y);
         }
 
         if(input_run(&space_input)){
@@ -116,6 +120,19 @@ int main(){
             ClearBackground(BLACK);
 
             BeginMode2D(camera);
+                // debug active
+                for(int i = 0; i < qvector_size(game.active_cells); i++){
+                    cell_coord* coord = qvector_getat(game.active_cells, i, false);
+                    if(!game.screen_board[(coord->x * game.width) + coord->y]){
+                        DrawRectangle(
+                                    display_data.offset.x + (coord->x * display_data.size),
+                                    display_data.offset.y + (coord->y * display_data.size),
+                                    display_data.size,
+                                    display_data.size,
+                                    DARKGRAY);
+                    }
+                }
+
                 for(int x = 0; x < game.width; x++){
                     for(int y = 0; y < game.height; y++){
                         if(game.screen_board[(x * game.width) + y]){

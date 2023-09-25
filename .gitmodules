@@ -1,0 +1,3 @@
+[submodule "lib/qlibc"]
+	path = lib/qlibc
+	url = git@github.com:wolkykim/qlibc.git
