@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.11) # FetchContent is available in 3.11+
-project(game_of_life)
+project(violet C)
 
 # Set this to the minimal version you want to support
 find_package(raylib 3.0 QUIET) # Let CMake search for a raylib-config.cmake
@@ -37,16 +37,16 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ggdb3 -pg")
 
 file(GLOB_RECURSE SOURCES src/*.c)
 set(HEADERS
-  include/
-  lib/Unity-2.5.2/src/)
+  include/)
 
 # This is the main part:
 add_library(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${HEADERS})
 target_link_libraries(${PROJECT_NAME} raylib m)
 
-add_executable(gameoflife src/main.c)
+add_executable(gameoflife main.c)
 target_link_libraries(gameoflife ${PROJECT_NAME})
+target_include_directories(gameoflife PUBLIC ${HEADERS})
 
 set(raylib_VERBOSE 1)
 

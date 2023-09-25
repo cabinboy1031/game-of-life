@@ -3,11 +3,10 @@
 #include <rlgl.h>
 #include <raymath.h>
 
-#include "raygui.h"
-#include "gol/game.h"
-#include "gol/grid.h"
-#include "gol/input.h"
-#include "gol/timer.h"
+#include <gol/game.h>
+#include <gol/grid.h>
+#include <gol/input.h>
+#include <gol/timer.h>
 
 
 int main(){
@@ -15,7 +14,7 @@ int main(){
     //--------------------------------------------------------------------------------------
     printf("%d\n", sizeof(int));
     const int SCREEN_WIDTH = 800;
-    const int SCREEN_HEIGHT = 600;
+    const int SCREEN_HEIGHT = 800;
     const int TARGET_FPS = 60;
     game_s game = game_new();
     grid_s display_data = grid_create(20, (Vector2){0, 0});
@@ -136,7 +135,7 @@ int main(){
                         display_data.offset.y,
                         display_data.offset.x + (x * display_data.size),
                         display_data.offset.y + (game.height * display_data.size),
-                        GRAY);
+                        (Color){32,32,32,255});
                 }
 
                 for(int y = 0; y <= game.height; y++){
@@ -145,7 +144,7 @@ int main(){
                         display_data.offset.y + (y * display_data.size),
                         display_data.offset.x + (game.width * display_data.size),
                         display_data.offset.y + (y * display_data.size),
-                        GRAY);
+                        (Color){32,32,32,255});
                 }
             EndMode2D();
             DrawText("Mouse right button drag to move, mouse wheel to zoom", 10, 10, 20, WHITE);
