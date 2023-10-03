@@ -64,6 +64,11 @@ void game_update(game_s* game){
         }
     }
 
+    /**
+     * FIXME: Disabled, active cells are disabling even if they are next to an alive cell
+     * This leads to wierd quirks like cells being orphaned and left on one of the boards
+     **/
+     /*
     // Check if any active cells do not need to be updated anymore
     for(int i = 0; i < qvector_size(game->active_cells); i++){
         cell_coord *coord = qvector_getat(game->active_cells, i, false);
@@ -76,6 +81,7 @@ void game_update(game_s* game){
         }
 
     }
+      */
 
 
     game_board_swap(game);
