@@ -14,6 +14,7 @@ int main(){
     game_s game = game_new();
     grid_s display_data = grid_create(20, (v_vec2_s){0, 0});
     v_renderer_s *renderer = v_renderer_init("SOKOL test",800, 800);
+    v_input_init(renderer->window);
 
     sg_setup(&(sg_desc){
             .logger.func = slog_func
