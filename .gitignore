@@ -4,3 +4,4 @@ build/
 .cache/
 gmon.out
 oprofile_data/
+compile_commands.json

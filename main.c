@@ -1,12 +1,6 @@
-#include <engine/graphics/renderer.h>
-#include <engine/util/math.h>
+#include <stdbool.h>
+#include <engine/core.h>
 #include <engine/util/timer.h>
-#include <engine/util/grid.h>
-#include <engine/interface/input.h>
-
-#include <sokol_gfx.h>
-#include <sokol_log.h>
-#include <engine/util/log.h>
 #include <stdio.h>
 #include <cglm/cglm.h>
 #include "gol/game.h"
@@ -24,6 +18,10 @@ int main(){
     sg_setup(&(sg_desc){
             .logger.func = slog_func
         });
+
+    simgui_setup(&(simgui_desc_t){
+        .logger = slog_func
+    });
 
     VGE_LOG_INFO("Creating test buffer...");
     /* a vertex buffer */
@@ -186,10 +184,21 @@ int main(){
         //----------------------------------------------------------------------------------
         int cur_width, cur_height;
         glfwGetFramebufferSize(renderer->window, &cur_width, &cur_height);
+
         sg_begin_default_pass(&pass_action, cur_width, cur_height);
-        sg_apply_pipeline(pip);
-        sg_apply_bindings(&bind);
-        sg_draw(0, 3, 1);
+            sg_apply_pipeline(pip);
+            sg_apply_bindings(&bind);
+            sg_draw(0, 3, 1);
+
+            simgui_new_frame(&(simgui_frame_desc_t){
+                    .width = cur_width,
+                    .height = cur_height,
+                    .delta_time = 0.1,
+                });
+            bool showDemo = true;
+            igShowDemoWindow(&showDemo);
+
+            simgui_render();
         sg_end_pass();
         sg_commit();
         glfwSwapBuffers(renderer->window);
@@ -200,6 +209,7 @@ int main(){
 //--------------------------------------------------------------------------------------
 game_delete(&game);
 //v_renderer_delete(renderer);
+simgui_shutdown();
 //--------------------------------------------------------------------------------------
 return 0;
 }
