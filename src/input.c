@@ -1,21 +1,23 @@
 #include "gol/input.h"
-#include <raylib.h>
 #include <stdio.h>
 
 bool input_run(key_input_s* input){
     switch(input->mode){
         case INPUT_KEY:
-            input_key_run(input);
+            return input_key_run(input);
             break;
         case INPUT_MOUSE:
-            input_mouse_run(input);
+            return input_mouse_run(input);
             break;
         default:
-            printf("Sorry, this input mode has not been implemented yet :^)");  
+            printf("Sorry, this input mode has not been implemented yet :^)");
+            return false;
     }
+    return false;
 }
 
 bool input_key_run(key_input_s* input){
+    /**
     if(input->ignore_hold && input->pressed){
         if(IsKeyUp(input->key)){
             input->pressed = false;
@@ -31,9 +33,12 @@ bool input_key_run(key_input_s* input){
         input->pressed = false;
         return false;
     }
+    **/
+    return false;
 }
 
 bool input_mouse_run(key_input_s* input){
+    /**
     if(input->ignore_hold && input->pressed){
         if(IsMouseButtonUp(input->key)){
             input->pressed = false;
@@ -49,4 +54,6 @@ bool input_mouse_run(key_input_s* input){
         input->pressed = false;
         return false;
     }
+    */
+    return false;
 }

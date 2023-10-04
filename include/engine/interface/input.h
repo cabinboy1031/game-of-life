@@ -1,5 +1,5 @@
 #pragma once
-#include <raylib.h>
+#include <stdbool.h>
 
 /**
  * Represents a predefined set of rules for an input

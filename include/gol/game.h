@@ -1,4 +1,3 @@
-#include <raylib.h>
 #include <qlibc/qlibc.h>
 
 #define GAME_WIDTH 1024
