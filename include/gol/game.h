@@ -1,4 +1,5 @@
 #include <qlibc/qlibc.h>
+#include <engine/interface/input.h>
 
 #define GAME_WIDTH 1024
 #define GAME_HEIGHT 1024
@@ -12,6 +13,8 @@ typedef struct game_s{
     int width, height;
     bool paused; // states whether the board SHOULD be paused or not
     char handle_edges; // decides the function used to handle walls.
+
+    v_input_component_s* input;
 } game_s;
 
 typedef struct cell_coord{

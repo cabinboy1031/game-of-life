@@ -1,8 +1,18 @@
 #include "gol/game.h"
 #include <stdlib.h>
+#include <engine/util/log.h>
 
 int cell_get_num_neighbors(game_s*, int, int);
 bool is_cell_alive(game_s*, int, int, int);
+
+bool set_active_cell(v_input_s input, void* actor){
+    game_s* game = (game_s*)actor;
+    v_mouse_input_s mouse = v_input_get_mouse();
+
+    VGE_LOG_INFO("Mouse Button Pressed: {%f, %f}", mouse.posX, mouse.posY);
+
+    return true;
+}
 
 game_s game_new(){
     game_s game = (game_s){
@@ -14,6 +24,17 @@ game_s game_new(){
         .paused = true,
         .handle_edges = EDGE_IS_LOOP,
     };
+
+    v_input_subject_s *subject = v_input_subject_init();
+    game.input = v_input_component_init(&game);
+    v_input_component_connect(game.input, subject);
+    v_input_subject_submit(subject,game.input);
+    v_input_component_register(game.input, &(v_button_input_desc_s){
+            .key = GLFW_MOUSE_BUTTON_1,
+            .mode = INPUT_BUTTON_MOUSE,
+            .func = set_active_cell,
+        });
+
 
     return game;
 }

@@ -7,14 +7,16 @@
 
 int main(){
     // Initialization
-    //--------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------
     VGE_LOG_INFO("Initializing engine...");
     const int SCREEN_WIDTH = 800;
     const int SCREEN_HEIGHT = 600;
-    game_s game = game_new();
-    grid_s display_data = grid_create(20, (v_vec2_s){0, 0});
     v_renderer_s *renderer = v_renderer_init("SOKOL test",800, 800);
     v_input_init(renderer->window);
+
+    // Post engine init functions
+    game_s game = game_new();
+    grid_s display_data = grid_create(20, (v_vec2_s){0, 0});
 
     sg_setup(&(sg_desc){
             .logger.func = slog_func
@@ -34,7 +36,8 @@ int main(){
     };
 
     VGE_LOG_INFO("Initializing test pipeline...");
-    /* a pipeline state object (default render states are fine for triangle) */
+    /* a pipeline state object
+     * (default render states are fine for triangle) */
     sg_pipeline pip = sg_make_pipeline(&(sg_pipeline_desc){
         .shader =
             sg_make_shader(&(sg_shader_desc){
@@ -77,26 +80,26 @@ int main(){
 
     timer_s timer;
     timer_start(&timer, .25);
-    //--------------------------------------------------------------------------------------
+    //----------------------------------------------------
 
     // Main game loop
-
-    while (!glfwWindowShouldClose(renderer->window)){       // Detect window close button or ESC key
-        //----------------------------------------------------------------------------------
+    // Detect window close button or ESC key
+    while (!glfwWindowShouldClose(renderer->window)){
+        //------------------------------------------------
         // Update
-        //----------------------------------------------------------------------------------
+        //------------------------------------------------
         // Input
-        //----------------------------------------------------------------------------------
-        //----------------------------------------------------------------------------------
+        //------------------------------------------------
+        //------------------------------------------------
         // Game Update 
-        //----------------------------------------------------------------------------------
+        //------------------------------------------------
         if(!game.paused && timer_done(timer)){
             game_update(&game);
             timer_start(&timer, 0.25);
         }
-        //----------------------------------------------------------------------------------
+        //------------------------------------------------
         // Draw
-        //----------------------------------------------------------------------------------
+        //------------------------------------------------
         int cur_width, cur_height;
         glfwGetFramebufferSize(renderer->window, &cur_width, &cur_height);
 
@@ -120,10 +123,10 @@ int main(){
 }
 
 // De-Initialization
-//--------------------------------------------------------------------------------------
+//--------------------------------------------------------
 game_delete(&game);
-//v_renderer_delete(renderer);
+v_renderer_delete(renderer);
 simgui_shutdown();
-//--------------------------------------------------------------------------------------
+//--------------------------------------------------------
 return 0;
 }
