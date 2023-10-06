@@ -19,11 +19,21 @@ v_renderer_s* v_renderer_init(char* title, int width, int height){
 
 void v_renderer_delete(v_renderer_s* renderer){
     sg_shutdown();
+    qvector_free(renderer->pipelines);
     glfwTerminate();
     free(renderer);
 };
 
 void v_renderer_submit_pipeline(v_renderer_s *renderer,sg_pipeline_desc *desc){
-    sg_pipeline pip= sg_make_pipeline(desc);
+    sg_pipeline pip = sg_make_pipeline(desc);
     qvector_addlast(renderer->pipelines,&pip);
+}
+
+void v_renderer_submit_bindings(v_renderer_s *renderer,sg_bindings bind){
+    renderer->bindings = bind;
+    sg_apply_bindings(&bind);
+}
+
+void v_renderer_set_pass_action(v_renderer_s *renderer, sg_pass_action pass){
+    renderer->pass_action = pass;
 }
