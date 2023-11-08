@@ -1,6 +1,7 @@
 #include "gol/game.h"
 #include <stdlib.h>
 #include <engine/util/log.h>
+#include <memory.h>
 
 int cell_get_num_neighbors(game_s*, int, int);
 bool is_cell_alive(game_s*, int, int, int);
@@ -34,7 +35,6 @@ game_s game_new(){
             .mode = INPUT_BUTTON_MOUSE,
             .func = set_active_cell,
         });
-
 
     return game;
 }
@@ -174,4 +174,23 @@ void game_set_active_with_neighbors(game_s* game, int x, int y){
     game_set_active(game, x + 1, y - 1);
     game_set_active(game, x + 1, y    );
     game_set_active(game, x + 1, y + 1);
+}
+
+float* get_game_buffer(game_s *game){
+    qvector_t *result = qvector(GAME_WIDTH * GAME_HEIGHT, sizeof(vec3), QVECTOR_RESIZE_DOUBLE);
+    for(int y = 0; y < GAME_WIDTH; y++){
+        for(int x = 0; x < GAME_HEIGHT; x++)
+        if(game_get_cell(game, x, y) == true){
+            vec3 temp;
+            float out[4] = {x, y, 0, 0};
+            glm_vec3(out, temp);
+            qvector_addlast(result, temp);
+        }
+    }
+
+    size_t size;
+    float* temp = qvector_toarray(result, &size);
+    float* output = malloc(size);
+    memcpy(temp, output, size);
+    return output;
 }

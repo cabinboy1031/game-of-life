@@ -22,11 +22,16 @@ set(HEADERS
   lib/sokol/
   lib/cimgui/
 )
+add_custom_target(assets COMMAND ${CMAKE_COMMAND} -E copy_directory
+  ${CMAKE_CURRENT_LIST_DIR}/assets
+  ${CMAKE_BINARY_DIR}/assets
+)
 
 # This is the main part:
 add_library(${PROJECT_NAME} ${SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${HEADERS})
 target_link_libraries(${PROJECT_NAME} m qlibc glfw cglm GL dl cimgui)
+add_dependencies(${PROJECT_NAME} assets)
 
 add_executable(gameoflife main.c)
 target_link_libraries(gameoflife ${PROJECT_NAME})

@@ -1,5 +1,7 @@
+#pragma once
 #include <qlibc/qlibc.h>
 #include <engine/interface/input.h>
+#include <cglm/cglm.h>
 
 #define GAME_WIDTH 1024
 #define GAME_HEIGHT 1024
@@ -64,3 +66,6 @@ void game_set_active(game_s*, int, int);
  * Also adds neighboring cells to active state
  * */
 void game_set_active_with_neighbors(game_s* ,int, int);
+
+
+float* get_game_buffer(game_s* game);
